@@ -6,7 +6,7 @@
   "author": "dexat0r",
   "license": "MIT",
   "scripts": {
-    "dev": "MODE=development ts-node index.ts",
+    "dev": "MODE=development ts-node src/index.ts",
     "prod": "MODE=production tsc && node ."
   },
   "devDependencies": {
