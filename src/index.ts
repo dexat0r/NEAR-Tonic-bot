@@ -31,11 +31,15 @@ async function monitorOrder(
     await new Promise<void>((resolve) => {
         let timeStart = Date.now();
         const interval = setInterval(async () => {
-            const orders = await tonic.getOpenOrders(marketId);
-            if (!orders.length) {
-                clearInterval(interval);
-                log(`Time passed: ${(Date.now() - timeStart) / 1000} seconds`);
-                resolve();
+            try {
+                const orders = await tonic.getOpenOrders(marketId);
+                if (!orders.length) {
+                    clearInterval(interval);
+                    log(`Time passed: ${(Date.now() - timeStart) / 1000} seconds`);
+                    resolve();
+                }
+            } catch (error) {
+                log(error);
             }
         }, i);
     });
