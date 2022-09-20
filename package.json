@@ -1,0 +1,26 @@
+{
+  "name": "dexat0r-bot",
+  "version": "1.0.0",
+  "description": "Bot for crypto trading on Near",
+  "main": "dist/index.js",
+  "author": "dexat0r",
+  "license": "MIT",
+  "scripts": {
+    "dev": "MODE=development ts-node index.ts",
+    "prod": "MODE=production tsc && node ."
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "chalk": "4.1.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "@tonic-foundation/config": "^1.0.0",
+    "@tonic-foundation/tonic": "^1.0.0",
+    "@tonic-foundation/utils": "^1.0.0",
+    "dotenv": "^16.0.2",
+    "near-api-js": "^1.0.0",
+    "pm2": "^5.2.0"
+  }
+}
