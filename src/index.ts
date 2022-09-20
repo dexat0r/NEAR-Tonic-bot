@@ -39,6 +39,9 @@ async function monitorOrder(
                     resolve();
                 }
             } catch (error) {
+                await new Promise<void>((resolve) => {
+                    setTimeout(() => resolve(), 31 * 1000)
+                })
                 log(error);
             }
         }, i);
