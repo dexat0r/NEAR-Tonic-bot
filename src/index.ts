@@ -43,11 +43,11 @@ async function monitorOrder(
 
 async function getTokenBalance(
     tonic: Tonic,
-    market: Market,
-    tokenId: string
+    tokenId: string,
+    decimals: number
 ): Promise<number> {
     const balances = await tonic.getBalances();
-    return market.quantityBnToNumber(balances[tokenId]);
+    return balances[tokenId] / Math.pow(10, decimals);
 }
 
 function log(msg: any, ...args: unknown[]) {
@@ -82,17 +82,18 @@ async function main(): Promise<void> {
 
     const marketId = process.env.MARKET_ID!;
     const market = await tonic.getMarket(marketId);
-    log(`Closing previous orders...`);
-    await tonic.cancelAllOrders(marketId);
+
+    const orders = await tonic.getOpenOrders(marketId);
+
+    if (orders.length) {
+        log(`Closing previous orders...`);
+        await tonic.cancelAllOrders(marketId);
+    }
 
     log(`Starting work process!`);
 
     while (true) {
-        const amountBuy = await getTokenBalance(
-            tonic,
-            market,
-            market.quoteTokenId
-        );
+        const amountBuy = await getTokenBalance(tonic, market.quoteTokenId, market.quoteDecimals);
         if (amountBuy > 0) {
             log(
                 `Creating Buy order with amount ${amountBuy} ${
@@ -120,8 +121,8 @@ async function main(): Promise<void> {
 
         const amountSell = await getTokenBalance(
             tonic,
-            market,
-            market.baseTokenId
+            market.baseTokenId,
+            market.baseDecimals
         );
 
         log(
@@ -145,7 +146,7 @@ async function main(): Promise<void> {
         await monitorOrder(tonic, marketId);
         log(
             `Cycle ends! Received: ${
-                (await getTokenBalance(tonic, market, market.quoteTokenId)) -
+                (await getTokenBalance(tonic, market.quoteTokenId, market.quoteDecimals)) -
                 amountBuy
             }`
         );

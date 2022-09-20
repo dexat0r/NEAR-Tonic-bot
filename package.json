@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "MODE=development NO_DEPRECATION=* ts-node src/index.ts",
-    "prod": "MODE=production NO_DEPRECATION=* tsc && node ."
+    "prod": "MODE=production tsc && node --no-deprecation ."
   },
   "devDependencies": {
     "@types/node": "^18.7.18",
